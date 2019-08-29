@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @if(isset($pessoa))
+    @if(isset($model))
     <h5><b>{{$nomeFormulario}}</b></h5>
     @endif
 
@@ -23,11 +23,11 @@
             <form method="post" action="{{route('pessoas.store', ['currentPage' => $currentPage])}}">
         @break
         @case(11)
-            <form method="post" action="{{route('pessoas.update', ['id' => $pessoa->id, 'currentPage' => $currentPage])}}">
+            <form method="post" action="{{route('pessoas.update', ['id' => $model->id, 'currentPage' => $currentPage])}}">
             @method('PUT')
         @break
         @case(12)
-            <form method="post" action="{{route('pessoas.destroy', ['id' => $pessoa->id, 'currentPage' => $currentPage])}}">
+            <form method="post" action="{{route('pessoas.destroy', ['id' => $model->id, 'currentPage' => $currentPage])}}">
             @method('DELETE')
         @break
     @endswitch
@@ -36,17 +36,17 @@
 
     <div class="form-group">
         <label>Código:</label>
-        <input type="number" name="id" readonly="true" disabled="true" class="form-control" value="{{$pessoa->id}}">
+        <input type="number" name="id" readonly="true" disabled="true" class="form-control" value="{{$model->id}}">
     </div>
 
     <div class="form-group">
         <label>Tipo:</label>
-        <select class="form-control" name="tipo" {{$readonly == 'readonly' ? 'disabled' : null}} {{$readonly}} class="form-control" >
+        <select class="form-control" name="tipo" {{$readonly}} class="form-control" >
             <option>Selecione...</option>
             @foreach($aTipoPessoa as $oOption)
                 <option
                     value="{{$oOption->getCodigo()}}"
-                    {{($pessoa->tipo == $oOption->getCodigo()) ? 'selected' : null}}
+                    {{($model->tipo == $oOption->getCodigo()) ? 'selected' : null}}
                     >{{$oOption->getNome()}}</option>
             @endforeach
         </select>
@@ -54,12 +54,12 @@
 
     <div class="form-group">
         <label>CPF / CNPJ:</label>
-        <input type="text" name="cpfcnpj" {{$readonly}} class="form-control" value="{{$pessoa->cpfcnpj}}">
+        <input type="text" name="cpfcnpj" {{$readonly}} class="form-control" value="{{$model->cpfcnpj}}">
     </div>
 
     <div class="form-group">
         <label>Nome:</label>
-        <input type="text" name="nome" {{$readonly}} class="form-control" value="{{$pessoa->nome}}">
+        <input type="text" name="nome" {{$readonly}} class="form-control" value="{{$model->nome}}">
     </div>
 
     <div class="btn-group-sm">

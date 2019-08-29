@@ -11,8 +11,17 @@ class PessoaController extends ControllerBase {
     private $Pessoa;
 
     public function __construct() {
+        parent::__construct();
         $this->middleware('auth');
         $this->Pessoa = new Pessoa();
+    }
+
+    protected function getViewName() {
+        return 'pessoa';
+    }
+
+    protected function posfixoTituloFormulario() {
+        return 'Pessoa';
     }
 
     /**
@@ -21,18 +30,12 @@ class PessoaController extends ControllerBase {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        /* @var $pessoas Pessoa */
-        $pessoas     = $this->Pessoa->orderBy('id')->paginate(10);
-        $currentPage = $pessoas->currentPage();
+        /* @var $models Pessoa */
+        $models      = $this->Pessoa->orderBy('id')->paginate(10);
+        $currentPage = $models->currentPage();
         $success     = session('success');
 
-        return view('pessoa-consulta', compact('pessoas', 'currentPage', 'success'));
-    }
-
-    private function createViewManutencao(Pessoa $pessoa, int $tipoForm, string $nomeFormulario, bool $bReadonly = false, $currentPage = 1) {
-        $readonly    = $bReadonly ? 'readonly' : '';
-        $aTipoPessoa = Pessoa::getListaTipo();
-        return view('pessoa-manutencao', compact('pessoa', 'tipoForm', 'readonly', 'nomeFormulario', 'currentPage', 'aTipoPessoa'));
+        return $this->loadViewConsulta($models);
     }
 
     /**
@@ -41,14 +44,9 @@ class PessoaController extends ControllerBase {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $pessoa      = $this->Pessoa;
-        $nomeForm    = "Incluir Pessoa";
-        $currentPage = request()->get('currentPage', 1);
-
-        $pessoa->setAttribute('id'  , old('id'));
-        $pessoa->setAttribute('nome', old('nome'));
-
-        return $this->createViewManutencao($pessoa, self::FORM_INCLUIR, $nomeForm, false, $currentPage);
+        $this->Pessoa->setAttribute('id'  , old('id'));
+        $this->Pessoa->setAttribute('nome', old('nome'));
+        return $this->loadViewManutencao($this->Pessoa, ['aTipoPessoa' => Pessoa::getListaTipo()]);
     }
 
     /**
@@ -71,20 +69,6 @@ class PessoaController extends ControllerBase {
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        $pessoa       = $this->Pessoa->find($id);
-        $nomeForm    = "Excluir Pessoa [Id: $id]";
-        $currentPage = request()->get('currentPage', 1);
-
-        return $this->createViewManutencao($pessoa, self::FORM_EXCLUIR, $nomeForm, true, $currentPage);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -93,15 +77,13 @@ class PessoaController extends ControllerBase {
     public function edit($id) {
         /* @var $pessoa Pessoa */
         $pessoa       = $this->Pessoa->find($id);
-        $nomeForm    = "Alterar Pessoa [Id: $id]";
-        $currentPage = request()->get('currentPage', 1);
 
         if(count(old()) > 0) {
             $pessoa->setAttribute('id'  , old('id'));
             $pessoa->setAttribute('nome', old('nome'));
         }
 
-        return $this->createViewManutencao($pessoa, self::FORM_ALTERAR, $nomeForm, false, $currentPage);
+        return $this->loadViewManutencao($pessoa, ['aTipoPessoa' => Pessoa::getListaTipo()]);
     }
 
     /**
@@ -127,6 +109,17 @@ class PessoaController extends ControllerBase {
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id) {
+        $pessoa = $this->Pessoa->find($id);
+        return $this->loadViewManutencao($pessoa, ['aTipoPessoa' => Pessoa::getListaTipo()]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -143,4 +136,5 @@ class PessoaController extends ControllerBase {
 
         return redirect()->route('pessoas.destroy');
     }
+
 }

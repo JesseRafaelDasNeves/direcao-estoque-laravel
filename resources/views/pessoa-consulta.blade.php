@@ -25,8 +25,8 @@
         </tr>
     </thead>
     <tbody>
-        @if(isset($pessoas))
-            @foreach($pessoas as $pessoa)
+        @if(isset($models))
+            @foreach($models as $pessoa)
             <tr>
                 <td>{{$pessoa->id}}</td>
                 <td>{{$pessoa->nome}}</td>
@@ -44,6 +44,6 @@
     </tbody>
 </table>
 
-{{$pessoas->links()}}
+{{$models->links()}}
 
 @endsection
