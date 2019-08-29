@@ -14,18 +14,20 @@ class Pessoa extends Model {
 
     public function getRules() {
         return Array(
-            'nome'   => 'required|min:3|max:200',
-            'tipo'   => 'required|numeric'
+            'nome'    => 'required|min:3|max:200',
+            'tipo'    => 'required|numeric',
+            'cpfcnpj' => 'required'
         );
     }
 
     public function getMessageValidate() {
         return Array(
-            'nome.required' => 'O nome é de preenchimento obrigatório',
-            'nome.min'      => 'O nome deve ter ao menos 3 caracteres',
-            'nome.max'      => 'O nome deve ter no máximo 200 caracteres',
-            'tipo.required' => 'O Tipo é de preenchimento obrigatório',
-            'tipo.numeric'  => 'O Tipo deve ser número'
+            'nome.required'    => 'O nome é de preenchimento obrigatório',
+            'nome.min'         => 'O nome deve ter ao menos 3 caracteres',
+            'nome.max'         => 'O nome deve ter no máximo 200 caracteres',
+            'tipo.required'    => 'O Tipo é de preenchimento obrigatório',
+            'tipo.numeric'     => 'O Tipo deve ser número',
+            'cpfcnpj.required' => 'O CPF/CNPJ é de preenchimento obrigatório'
         );
     }
 
