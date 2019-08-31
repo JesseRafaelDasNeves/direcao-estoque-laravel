@@ -2,26 +2,20 @@
 
 @section('content')
 
-@if(isset($success))
-    <div class="alert alert-success alert-dismissible fade show" role="alert" >
-        {{$success}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endif
+@include('layouts.alert-success')
 
 <div class="btn-group-sm" >
     <a href="{{route('pessoas.create', ['currentPage' => $currentPage])}}" class="btn btn-primary">Incluir</a>
 </div>
 
-<table class="table table-striped">
+<table class="table table-sm table-striped">
+    <caption>Lista de Pessoas</caption>
     <thead>
         <tr>
-            <th style="width: 200px;" scope="col">Código</th>
+            <th scope="col" style="width: 200px;">Código</th>
             <th scope="col">Nome</th>
             <th scope="col">CPF/CNPJ</th>
-            <th style="width: 150px" scope="col">Ações</th>
+            <th scope="col" style="width: 150px">Ações</th>
         </tr>
     </thead>
     <tbody>

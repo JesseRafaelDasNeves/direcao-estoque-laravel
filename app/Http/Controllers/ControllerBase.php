@@ -15,14 +15,13 @@ abstract class ControllerBase extends Controller {
     /** @var Model */
     protected $Model;
 
-    private $acao;
+    private $codigoAcao;
 
     const FORM_INCLUIR = 10,
           FORM_ALTERAR = 11,
           FORM_EXCLUIR = 12;
 
     public function __construct() {
-        $this->loadCodigoAcao();
         $this->Model = $this->getInstanceModel();
     }
 
@@ -34,12 +33,19 @@ abstract class ControllerBase extends Controller {
 
     protected abstract function getInstanceModel();
 
-    protected function getParamsExtraViewManutencao() : array {
+    protected function getParamsExtraViewManutencao($oModel) : array {
         return [];
     }
 
     protected function getParamsExtraViewConsulta() : array {
         return [];
+    }
+
+    protected final function getCodigoAcao() {
+        if (!isset($this->codigoAcao)) {
+            $this->loadCodigoAcao();
+        }
+        return $this->codigoAcao;
     }
 
     protected function getCurrentPageLista() : int {
@@ -50,21 +56,21 @@ abstract class ControllerBase extends Controller {
         switch (true) {
             case $this->existsMethodRoute('create'):
             case $this->existsMethodRoute('store'):
-                $this->acao = self::FORM_INCLUIR;
+                $this->codigoAcao = self::FORM_INCLUIR;
             break;
             case $this->existsMethodRoute('edit'):
             case $this->existsMethodRoute('update'):
-                $this->acao = self::FORM_ALTERAR;
+                $this->codigoAcao = self::FORM_ALTERAR;
             break;
             case $this->existsMethodRoute('show'):
             case $this->existsMethodRoute('destroy'):
-                $this->acao = self::FORM_EXCLUIR;
+                $this->codigoAcao = self::FORM_EXCLUIR;
             break;
         }
     }
 
     protected final function createNameForm() {
-        switch ($this->acao)  {
+        switch ($this->getCodigoAcao())  {
             case self::FORM_INCLUIR;
                 return "Incluir {$this->posfixoTitulo()}";
             break;
@@ -86,9 +92,9 @@ abstract class ControllerBase extends Controller {
         $data                = isset($params[0]) ? $params[0]: [];
         $data['model']       = $model;
         $data['currentPage'] = $this->getCurrentPageLista();
-        $data['tipoForm']    = $this->acao;
+        $data['tipoForm']    = $this->getCodigoAcao();
         $data['nomeFormulario'] = $this->createNameForm();
-        $data['readonly']       = $this->acao === self::FORM_INCLUIR;
+        $data['readonly']       = in_array($this->getCodigoAcao(), [self::FORM_EXCLUIR]) ? 'readonly' : null;
         $sNome                  = "{$this->getName()}-manutencao";
         return view($sNome, $data);
     }
@@ -122,7 +128,7 @@ abstract class ControllerBase extends Controller {
      */
     public function create() {
         $this->Model->setRawAttributes(old());
-        return $this->loadViewManutencao($this->Model, $this->getParamsExtraViewManutencao());
+        return $this->loadViewManutencao($this->Model, $this->getParamsExtraViewManutencao($this->Model));
     }
 
     /**
@@ -135,9 +141,9 @@ abstract class ControllerBase extends Controller {
         /* @var $model Model */
         $model = $this->Model->find($id);
         if(count(old()) > 0) {
-            $this->Model->setRawAttributes(old());
+            $model->setRawAttributes(old());
         }
-        return $this->loadViewManutencao($model, $this->getParamsExtraViewManutencao());
+        return $this->loadViewManutencao($model, $this->getParamsExtraViewManutencao($model));
     }
 
     /**
@@ -148,7 +154,7 @@ abstract class ControllerBase extends Controller {
      */
     public function show($id) {
         $model = $this->Model->find($id);
-        return $this->loadViewManutencao($model, $this->getParamsExtraViewManutencao());
+        return $this->loadViewManutencao($model, $this->getParamsExtraViewManutencao($model));
     }
 
     /**

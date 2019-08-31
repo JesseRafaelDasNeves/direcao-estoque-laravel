@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Pessoa;
+use App\Model;
 
 class PessoaController extends ControllerBase {
 
@@ -27,8 +28,8 @@ class PessoaController extends ControllerBase {
         return 'pessoas';
     }
 
-    protected function getParamsExtraViewManutencao(): array {
-        return ['aTipoPessoa' => Pessoa::getListaTipo()];
+    protected function getParamsExtraViewManutencao($oModel): array {
+        return ['aTipoPessoa' => Pessoa::getListaTipo($oModel->tipo)];
     }
 
 }

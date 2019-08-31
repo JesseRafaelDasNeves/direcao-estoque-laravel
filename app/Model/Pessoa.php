@@ -31,11 +31,17 @@ class Pessoa extends Model {
         );
     }
 
-    public static function getListaTipo() {
-        return Array(
+    public static function getListaTipo(int $iTipo = null) {
+        $aLista = Array(
             new Lista(self::TIPO_FISICA  , 'Física'),
             new Lista(self::TIPO_JURIDICA, 'Jurídica')
         );
+
+        if(is_numeric($iTipo)) {
+            Lista::seleciona($aLista, $iTipo);
+        }
+
+        return $aLista;
     }
 
 }
