@@ -12,7 +12,7 @@
     <caption>Lista de Fornecedores</caption>
     <thead>
         <tr>
-            <th scope="col" style="width: 200px;">Código</th>
+            <th scope="col" style="width: 100px;">Código</th>
             <th scope="col">Tipo Empresa</th>
             <th scope="col">Nome</th>
             <th scope="col" style="width: 50px;">Ações</th>
