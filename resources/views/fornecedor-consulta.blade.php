@@ -15,7 +15,7 @@
             <th scope="col" style="width: 200px;">Código</th>
             <th scope="col">Tipo Empresa</th>
             <th scope="col">Nome</th>
-            <th scope="col" style="width: 150px">Ações</th>
+            <th scope="col" style="width: 50px;">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -25,11 +25,8 @@
                 <td>{{$fornecedor->id}}</td>
                 <td>{{$fornecedor->getDestricaoTipo()}}</td>
                 <td>{{$fornecedor->getPessoa()->nome}}</td>
-                <td>
-                    <div class="btn-group-sm">
-                        <a href="{{route('fornecedores.edit', ['id' => $fornecedor->id, 'currentPage' => $currentPage])}}" class="btn btn-secondary">Alterar</a>
-                        <a href="{{route('fornecedores.show', ['id' => $fornecedor->id, 'currentPage' => $currentPage])}}" class="btn btn-danger">Excluir</a>
-                    </div>
+                <td style="text-align: right;">
+                    @include('grid-app.row-container-acao', ['id' => $fornecedor->id, 'prefixRoute' => 'fornecedores'])
                 </td>
             </tr>
             @endforeach

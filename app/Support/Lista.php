@@ -13,7 +13,7 @@ class Lista {
     private $nome;
     private $atributos;
 
-    public function __construct(int $codigo, string $nome, Array $atributos = []) {
+    public function __construct(string $codigo, string $nome, Array $atributos = []) {
         $this->codigo    = $codigo;
         $this->nome      = $nome;
         $this->atributos = $atributos;
@@ -67,7 +67,7 @@ class Lista {
         return $retorno;
     }
 
-    public static function seleciona(Array $aLista, int $codigo = null) {
+    public static function seleciona(Array $aLista, string $codigo = null) {
         foreach ($aLista as /* @var $oLista Lista */ $oLista) {
             if($oLista->getCodigo() == $codigo) {
                 $oLista->addAtributo('selected');
@@ -79,7 +79,7 @@ class Lista {
      * @param int $codigo
      * @return Lista
      */
-    public static function getItem(Array $aLista, int $codigo) {
+    public static function getItem(Array $aLista, string $codigo) {
         $oRetorno = null;
         foreach ($aLista as /* @var $oLista Lista */ $oLista) {
             if($oLista->getCodigo() == $codigo) {

@@ -6,4 +6,5 @@ Auth::routes();
 
 Route::resource('/pessoas'     , 'PessoaController');
 Route::resource('/fornecedores', 'FornecedorController');
+Route::resource('/produtos'    , 'ProdutoController');
 

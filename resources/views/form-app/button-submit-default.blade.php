@@ -2,7 +2,7 @@
 
     @switch($tipoForm)
         @case(12)
-            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            <button type="submit"  class="btn btn-danger">Confirmar Exclusão</button>
         @break
         @default
             <button type="submit" class="btn btn-primary">Confirmar</button>
