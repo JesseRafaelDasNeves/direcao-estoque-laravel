@@ -60,4 +60,8 @@ class Fornecedor extends Model {
         return Lista::getItem(self::getListaTipo(), $this->tipo)->getNome();
     }
 
+    public function pessoa() {
+        return $this->hasOne('App\Model\Pessoa', 'id', 'idpessoa');
+    }
+
 }

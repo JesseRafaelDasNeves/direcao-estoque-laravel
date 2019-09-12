@@ -11,13 +11,15 @@ class Entrada extends Model {
     const SITUACAO_EM_ELABORACAO  = 1,
           SITUACAO_CONCLUIDA      = 2;
 
-    protected $fillable = ['data', 'hora', 'situacao', 'numero_nota', 'observacao'];
+    protected $dateFormat = 'd/m/Y';
+    protected $fillable   = ['data', 'hora', 'situacao', 'numero_nota', 'observacao', 'idfornecedor'];
 
     public function getRules() {
         return Array(
             'data'   => 'required',
             'hora'   => 'required',
             /*'situacao'   => 'required',*/
+            'idfornecedor'   => 'required|numeric',
             'numero_nota' => 'required|numeric'
         );
     }
@@ -27,13 +29,14 @@ class Entrada extends Model {
             'data.required'   => 'A data é de preenchimento obrigatório',
             'hora.required'   => 'A hora é de preenchimento obrigatório',
             /*'situacao.required'   => 'Situação não definida',*/
-            'numero_nota.required' => 'O número da nota é de preenchimento obrigatório'
+            'numero_nota.required' => 'O número da nota é de preenchimento obrigatório',
+            'idfornecedor.required' => 'O fonecedor é de preenchimento obrigatório',
+            'idfornecedor.numeric' => 'O código do fonecedor deve ser numérico'
         );
     }
 
-    public function getDataAttribute() {
+    public function getDataFomatada() {
         $data = $this->getAttributeFromArray('data');
-
         if(is_null($data)) {
             return null;
         }
@@ -60,6 +63,10 @@ class Entrada extends Model {
 
     public function getDestricaoSituacao() {
         return Lista::getItem(self::getListaSituacao(), $this->situacao)->getNome();
+    }
+
+    public function fornecedor() {
+        return $this->hasOne('App\Model\Fornecedor', 'id', 'idfornecedor');
     }
 
 }

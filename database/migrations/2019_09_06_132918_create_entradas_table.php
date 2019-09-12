@@ -19,7 +19,10 @@ class CreateEntradasTable extends Migration {
             $table->enum('situacao', [1,2]);
             $table->integer('numero_nota');
             $table->text('observacao')->nullable();
+            $table->bigInteger('idfornecedor');
             $table->timestamps();
+
+            $table->foreign('idfornecedor', 'fk_fornecedor_entrada')->references('id')->on('fornecedores');
         });
     }
 

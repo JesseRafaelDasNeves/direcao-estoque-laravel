@@ -32,7 +32,6 @@ class FornecedorController extends ControllerBase {
 
     protected function getParamsExtraViewManutencao($oModel): array {
         $aListaPessoa = $this->getListaPessoas();
-        //dd($oModel);
         Lista::seleciona($aListaPessoa, is_numeric($oModel->idpessoa) ? $oModel->idpessoa : null);
         return Array(
             'aTipoEmpresa' => $oModel->getListaTipo(is_numeric($oModel->tipo) ? $oModel->tipo : null),

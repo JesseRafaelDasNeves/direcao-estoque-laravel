@@ -26,6 +26,18 @@
     </div>
 
     <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Fornecedor:</label>
+        <div class="col-sm-10">
+            <select class="form-control form-control-sm" name="idfornecedor" {{!is_null($readonly) ? 'disabled' : ''}} >
+                <option>Selecione...</option>
+                @foreach($aFornecedores as $oFornecedor)
+                    <option value="{{$oFornecedor->getCodigo()}}" {{$oFornecedor->getAtributosAsString()}}>{{$oFornecedor->getNome()}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
         <label class="col-sm-2 col-form-label">Número Nota:</label>
         <div class="col-sm-10">
             <input type="number" name="numero_nota" {{$readonly}} class="form-control form-control-sm" value="{{$model->numero_nota}}">
