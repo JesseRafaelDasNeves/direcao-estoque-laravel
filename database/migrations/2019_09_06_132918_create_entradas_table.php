@@ -14,7 +14,9 @@ class CreateEntradasTable extends Migration {
     public function up() {
         Schema::create('entradas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->dateTime('data_hora');
+            $table->date('data');
+            $table->time('hora');
+            $table->enum('situacao', [1,2]);
             $table->integer('numero_nota');
             $table->text('observacao')->nullable();
             $table->timestamps();

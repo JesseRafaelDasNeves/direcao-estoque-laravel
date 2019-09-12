@@ -165,7 +165,7 @@ abstract class ControllerBase extends Controller {
      */
     public function store(Request $request) {
         $this->validate($request, $this->Model->getRules(), $this->Model->getMessageValidate());
-        $bInseriu = $this->Model->create($request->all());
+        $bInseriu = $this->executeCreate($request);
 
         if($bInseriu) {
             $currentPage = request()->get('currentPage', 1);
@@ -174,6 +174,10 @@ abstract class ControllerBase extends Controller {
         }
 
         return redirect()->route("{$this->posfixoRoute()}.create");
+    }
+
+    protected function executeCreate(Request $request) {
+        return $this->Model->create($request->all());
     }
 
     /**

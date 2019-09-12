@@ -12,9 +12,16 @@
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Data/Hora:</label>
+        <label class="col-sm-2 col-form-label">Data:</label>
         <div class="col-sm-10">
-            <input type="datetime" name="data_hora" {{$readonly}} class="form-control form-control-sm" value="{{$model->data_hora}}">
+            <input type="date" name="data" {{$readonly}} class="form-control form-control-sm" value="{{$model->data}}">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Hora:</label>
+        <div class="col-sm-10">
+            <input type="time" name="hora" {{$readonly}} class="form-control form-control-sm" value="{{$model->hora}}">
         </div>
     </div>
 
