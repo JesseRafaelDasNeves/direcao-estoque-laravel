@@ -11,8 +11,7 @@ class Entrada extends Model {
     const SITUACAO_EM_ELABORACAO  = 1,
           SITUACAO_CONCLUIDA      = 2;
 
-    protected $dateFormat = 'd/m/Y';
-    protected $fillable   = ['data', 'hora', 'situacao', 'numero_nota', 'observacao', 'idfornecedor'];
+    protected $fillable = ['data', 'hora', 'situacao', 'numero_nota', 'observacao', 'idfornecedor'];
 
     public function getRules() {
         return Array(
