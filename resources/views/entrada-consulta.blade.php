@@ -35,7 +35,11 @@
                     <td>{{$entrada->getDestricaoSituacao()}}</td>
                     <td style="text-align: right;">{{$entrada->valor_total}}</td>
                     <td style="text-align: right;">
-                        @include('grid-app.row-container-acao', ['id' => $entrada->id, 'prefixRoute' => 'entradas'])
+                        @include('grid-app.row-container-acao', [
+                            'id' => $entrada->id,
+                            'prefixRoute' => 'entradas',
+                            'rotasExtras' => ['itemEntrada.index' => 'Itens']
+                        ])
                     </td>
                 </tr>
                 @endforeach

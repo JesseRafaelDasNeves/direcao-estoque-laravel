@@ -20,7 +20,7 @@ class ProdutoController extends ControllerBase {
         return 'produto';
     }
 
-    protected function posfixoRoute() {
+    protected function prefixoRoute() {
         return 'produtos';
     }
 

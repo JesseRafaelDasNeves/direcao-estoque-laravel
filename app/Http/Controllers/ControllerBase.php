@@ -29,7 +29,7 @@ abstract class ControllerBase extends Controller {
 
     protected abstract function posfixoTitulo();
 
-    protected abstract function posfixoRoute();
+    protected abstract function prefixoRoute();
 
     protected abstract function getInstanceModel();
 
@@ -39,6 +39,17 @@ abstract class ControllerBase extends Controller {
 
     protected function getParamsExtraViewConsulta() : array {
         return [];
+    }
+
+    protected function getParamsRoute($oModel) : array {
+        return [];
+    }
+
+    protected function beforeCreateView() : void {}
+
+    private function createParamsRoute($oModel) : array {
+        $currentPage = request()->get('currentPage', 1);
+        return array_merge($this->getParamsRoute($oModel), ['currentPage' => $currentPage]);
     }
 
     protected final function getCodigoAcao() {
@@ -104,6 +115,7 @@ abstract class ControllerBase extends Controller {
         $data['models']      = $models;
         $data['currentPage'] = $models->currentPage();
         $data['success']     = session('success');
+        $data['nomeFormulario'] = "Lista de {$this->posfixoTitulo()}";
         $sNome               = "{$this->getName()}-consulta";
         return view($sNome, $data);
     }
@@ -128,6 +140,7 @@ abstract class ControllerBase extends Controller {
      */
     public function create() {
         $this->Model->setRawAttributes(old());
+        $this->beforeCreateView();
         return $this->loadViewManutencao($this->Model, $this->getParamsExtraViewManutencao($this->Model));
     }
 
@@ -165,15 +178,16 @@ abstract class ControllerBase extends Controller {
      */
     public function store(Request $request) {
         $this->validate($request, $this->Model->getRules(), $this->Model->getMessageValidate());
-        $bInseriu = $this->executeCreate($request);
+        $bModelInsert = $this->executeCreate($request);
 
-        if($bInseriu) {
-            $currentPage = request()->get('currentPage', 1);
-            $success     = "{$this->posfixoTitulo()} incluído(a) com sucesso.";
-            return redirect()->route("{$this->posfixoRoute()}.index", ['page' => $currentPage])->with('success', $success);
+        if($bModelInsert) {
+            $currentPage  = request()->get('currentPage', 1);
+            $success      = "{$this->posfixoTitulo()} incluído(a) com sucesso.";
+            $aParamsRoute = $this->createParamsRoute($bModelInsert);
+            return redirect()->route("{$this->prefixoRoute()}.index", $aParamsRoute)->with('success', $success);
         }
 
-        return redirect()->route("{$this->posfixoRoute()}.create");
+        return redirect()->route("{$this->prefixoRoute()}.create");
     }
 
     protected function executeCreate(Request $request) {
@@ -191,15 +205,15 @@ abstract class ControllerBase extends Controller {
         /* @var $model Model */
         $model    = $this->Model->find($id);
         $this->validate($request, $model->getRules(), $model->getMessageValidate());
-        $bAlterou = $model->update($request->all());
+        $oModelUpdate = $model->update($request->all());
 
-        if($bAlterou) {
+        if($oModelUpdate) {
             $currentPage = $request->get('currentPage', 1);
             $success     = "{$this->posfixoTitulo()} alterado(a) com sucesso.";
-            return redirect()->route("{$this->posfixoRoute()}.index", ['page' => $currentPage])->with('success', $success);
+            return redirect()->route("{$this->prefixoRoute()}.index", $this->createParamsRoute($model))->with('success', $success);
         }
 
-        return redirect()->route("{$this->posfixoRoute()}.update");
+        return redirect()->route("{$this->prefixoRoute()}.update");
     }
 
     /**
@@ -209,15 +223,17 @@ abstract class ControllerBase extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $bdelete = $this->Model->destroy($id);
+        $model    = $this->Model->find($id);
+        $bExcluiu = $this->Model->destroy($id);
 
-        if($bdelete) {
+        if($bExcluiu) {
             $currentPage = request()->get('currentPage', 1);
             $success     = "{$this->posfixoTitulo()} excluído(a) com sucesso.";
-            return redirect()->route("{$this->posfixoRoute()}.index", ['page' => $currentPage])->with('success', $success);
+            $aParamsRoute = $this->createParamsRoute($model);
+            return redirect()->route("{$this->prefixoRoute()}.index", $aParamsRoute)->with('success', $success);
         }
 
-        return redirect()->route("{$this->posfixoRoute()}.destroy");
+        return redirect()->route("{$this->prefixoRoute()}.destroy");
     }
 
 }

@@ -23,7 +23,7 @@ class EntradaController extends ControllerBase {
         return 'entrada';
     }
 
-    protected function posfixoRoute() {
+    protected function prefixoRoute() {
         return 'entradas';
     }
 

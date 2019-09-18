@@ -22,7 +22,7 @@ class FornecedorController extends ControllerBase {
         return 'fornecedor';
     }
 
-    protected function posfixoRoute() {
+    protected function prefixoRoute() {
         return 'fornecedores';
     }
 

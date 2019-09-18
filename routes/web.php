@@ -9,3 +9,5 @@ Route::resource('/fornecedores', 'FornecedorController');
 Route::resource('/produtos'    , 'ProdutoController');
 Route::resource('/entradas'    , 'EntradaController');
 
+Route::resource('/entradas/{identrada}/itemEntrada', 'ItemEntradaController');
+

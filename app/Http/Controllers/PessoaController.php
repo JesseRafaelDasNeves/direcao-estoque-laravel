@@ -24,7 +24,7 @@ class PessoaController extends ControllerBase {
         return 'Pessoa';
     }
 
-    protected function posfixoRoute() {
+    protected function prefixoRoute() {
         return 'pessoas';
     }
 
