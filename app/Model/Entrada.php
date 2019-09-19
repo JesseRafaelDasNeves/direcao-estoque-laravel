@@ -68,4 +68,8 @@ class Entrada extends Model {
         return $this->hasOne('App\Model\Fornecedor', 'id', 'idfornecedor');
     }
 
+    public function getValorTotal() {
+        return ItemEntrada::where(['identrada' => $this->id])->sum('valortotal');
+    }
+
 }

@@ -33,7 +33,7 @@
                     <td>{{$entrada->numero_nota}}</td>
                     <td>{{$entrada->fornecedor->pessoa->nome}}</td>
                     <td>{{$entrada->getDestricaoSituacao()}}</td>
-                    <td style="text-align: right;">{{$entrada->valor_total}}</td>
+                    <td style="text-align: right;">{{$entrada->getValorTotal()}}</td>
                     <td style="text-align: right;">
                         @include('grid-app.row-container-acao', [
                             'id' => $entrada->id,

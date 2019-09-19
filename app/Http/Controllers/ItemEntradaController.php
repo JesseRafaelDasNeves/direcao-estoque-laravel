@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Model\ItemEntrada;
 use App\Support\Lista;
 use App\Model\Produto;
+use App\Model\Entrada;
 
 class ItemEntradaController extends ControllerBase {
 
@@ -30,6 +31,10 @@ class ItemEntradaController extends ControllerBase {
         return 'Item Entrada';
     }
 
+    protected function posfixoTituloConsulta() {
+        return 'Itens da Entrada ' . request()->route('identrada');
+    }
+
     protected function beforeCreateView(): void {
         parent::beforeCreateView();
         $this->Model->identrada = request()->route('identrada');
@@ -40,6 +45,12 @@ class ItemEntradaController extends ControllerBase {
         Lista::seleciona($aListaProdutos, is_numeric($oModel->idproduto) ? $oModel->idproduto: null);
         return Array(
             'aProdutos' => $aListaProdutos
+        );
+    }
+
+    protected function getParamsExtraViewConsulta(): array {
+        return Array(
+            'entrada' => Entrada::find(request()->route('identrada'))
         );
     }
 
@@ -57,6 +68,12 @@ class ItemEntradaController extends ControllerBase {
         return Array(
             'identrada' => $oModel->identrada
         );
+    }
+
+    public function index($iIdEntrada = null) {
+        /* @var $models Model */
+        $models = $this->Model->where(['identrada' => $iIdEntrada])->orderBy('id')->paginate(10);
+        return $this->loadViewConsulta($models, $this->getParamsExtraViewConsulta());
     }
 
     public function edit($identrada, $id = null) {

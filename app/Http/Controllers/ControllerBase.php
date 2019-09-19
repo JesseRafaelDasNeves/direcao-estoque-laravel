@@ -17,9 +17,10 @@ abstract class ControllerBase extends Controller {
 
     private $codigoAcao;
 
-    const FORM_INCLUIR = 10,
-          FORM_ALTERAR = 11,
-          FORM_EXCLUIR = 12;
+    const FORM_INCLUIR   = 10,
+          FORM_ALTERAR   = 11,
+          FORM_EXCLUIR   = 12,
+          FORM_CONSULTAR = 13;
 
     public function __construct() {
         $this->Model = $this->getInstanceModel();
@@ -30,6 +31,8 @@ abstract class ControllerBase extends Controller {
     protected abstract function posfixoTitulo();
 
     protected abstract function prefixoRoute();
+
+    protected function posfixoTituloConsulta() {}
 
     protected abstract function getInstanceModel();
 
@@ -77,6 +80,9 @@ abstract class ControllerBase extends Controller {
             case $this->existsMethodRoute('destroy'):
                 $this->codigoAcao = self::FORM_EXCLUIR;
             break;
+            case $this->existsMethodRoute('index'):
+                $this->codigoAcao = self::FORM_CONSULTAR;
+            break;
         }
     }
 
@@ -90,6 +96,9 @@ abstract class ControllerBase extends Controller {
             break;
             case self::FORM_EXCLUIR;
                 return "Excluir {$this->posfixoTitulo()}";
+            break;
+            case self::FORM_CONSULTAR;
+                return "Consultar {$this->posfixoTituloConsulta()}";
             break;
         }
     }
@@ -111,12 +120,12 @@ abstract class ControllerBase extends Controller {
     }
 
     protected function loadViewConsulta($models, ...$params) {
-        $data                = isset($params[0]) ? $params[0]: [];
-        $data['models']      = $models;
-        $data['currentPage'] = $models->currentPage();
-        $data['success']     = session('success');
-        $data['nomeFormulario'] = "Lista de {$this->posfixoTitulo()}";
-        $sNome               = "{$this->getName()}-consulta";
+        $data                   = isset($params[0]) ? $params[0]: [];
+        $data['models']         = $models;
+        $data['currentPage']    = $models->currentPage();
+        $data['success']        = session('success');
+        $data['nomeFormulario'] = $this->createNameForm();
+        $sNome                  = "{$this->getName()}-consulta";
         return view($sNome, $data);
     }
 
@@ -127,10 +136,8 @@ abstract class ControllerBase extends Controller {
      */
     public function index() {
         /* @var $models Model */
-        $models      = $this->Model->orderBy('id')->paginate(10);
-        $currentPage = $models->currentPage();
-        $success     = session('success');
-        return $this->loadViewConsulta($models);
+        $models = $this->Model->orderBy('id')->paginate(10);
+        return $this->loadViewConsulta($models, $this->getParamsExtraViewConsulta());
     }
 
     /**
