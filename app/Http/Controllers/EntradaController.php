@@ -77,7 +77,7 @@ class EntradaController extends ControllerBase {
     public function conclui($iId) {
         /* @var $oEntrada Entrada */
         $oEntrada = $this->Model->find($iId);
-        $valido   = $this->validaSituacaoPermiteManutencao($this->Model, 'concluir');
+        $valido   = $this->validaSituacaoPermiteManutencao($oEntrada, 'concluir');
 
         if($valido instanceof RedirectResponse) {
             return $valido;
