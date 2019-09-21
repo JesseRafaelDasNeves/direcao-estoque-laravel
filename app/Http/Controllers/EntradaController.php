@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Entrada;
+use App\Model\ItemEntrada;
 use App\Model\Fornecedor;
+use App\Model\Estoque;
 use \Carbon\Carbon;
 use App\Support\Lista;
 
@@ -51,6 +53,26 @@ class EntradaController extends ControllerBase {
             $aLista[] = new Lista($oFornecedor->id, $oFornecedor->getPessoa()->nome);
         }
         return $aLista;
+    }
+
+    public function conclui($iId) {
+        /* @var $oEntrada Entrada */
+        $oEntrada = $this->Model->find($iId);
+        $bAlterou = $oEntrada->update(['situacao' => Entrada::SITUACAO_CONCLUIDA]);
+
+        if($bAlterou) {
+            $aItens = ItemEntrada::where('identrada', '=', $oEntrada->id);
+
+            foreach ($aItens as $oItemEntrada) {
+                $oEstoqueProduto = Estoque::where('idproduto', '=', $oItemEntrada->idproduto);
+
+                if($oEstoqueProduto) {
+                    
+                }
+            }
+        }
+
+        return dd($iId);
     }
 
 }

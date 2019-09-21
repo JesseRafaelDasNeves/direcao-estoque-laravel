@@ -38,7 +38,10 @@
                         @include('grid-app.row-container-acao', [
                             'id' => $entrada->id,
                             'prefixRoute' => 'entradas',
-                            'rotasExtras' => ['itemEntrada.index' => 'Itens']
+                            'rotasExtras' => [
+                                'itemEntrada.index' => 'Itens',
+                                'entradas.conclui'  => 'Conclui'
+                            ]
                         ])
                     </td>
                 </tr>
