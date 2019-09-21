@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * Description of ControllerBase
@@ -184,7 +185,12 @@ abstract class ControllerBase extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $this->validate($request, $this->Model->getRules(), $this->Model->getMessageValidate());
+        $valido = $this->validateStore($request, $this->Model);
+
+        if($valido instanceof RedirectResponse) {
+            return $valido;
+        }
+
         $bModelInsert = $this->executeCreate($request);
 
         if($bModelInsert) {
@@ -211,7 +217,12 @@ abstract class ControllerBase extends Controller {
     public function update(Request $request, $id) {
         /* @var $model Model */
         $model    = $this->Model->find($id);
-        $this->validate($request, $model->getRules(), $model->getMessageValidate());
+        $valido  = $this->validateUpdate($request, $model);
+
+        if($valido instanceof RedirectResponse) {
+            return $valido;
+        }
+
         $oModelUpdate = $model->update($request->all());
 
         if($oModelUpdate) {
@@ -230,7 +241,13 @@ abstract class ControllerBase extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $model    = $this->Model->find($id);
+        $model  = $this->Model->find($id);
+        $valido = $this->validateDestroy($model);
+
+        if($valido instanceof RedirectResponse) {
+            return $valido;
+        }
+
         $bExcluiu = $this->Model->destroy($id);
 
         if($bExcluiu) {
@@ -241,6 +258,20 @@ abstract class ControllerBase extends Controller {
         }
 
         return redirect()->route("{$this->prefixoRoute()}.destroy");
+    }
+
+    protected function validateStore(Request $request, Model $oModel) {
+        $this->validate($request, $oModel->getRules(), $oModel->getMessageValidate());
+        return true;
+    }
+
+    protected function validateUpdate(Request $request, Model $oModel) {
+        $this->validate($request, $oModel->getRules(), $oModel->getMessageValidate());
+        return true;
+    }
+
+    protected function validateDestroy(Model $oModel) {
+        return true;
     }
 
 }

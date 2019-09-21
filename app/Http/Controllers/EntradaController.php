@@ -7,8 +7,10 @@ use App\Model\Entrada;
 use App\Model\ItemEntrada;
 use App\Model\Fornecedor;
 use App\Model\Estoque;
-use \Carbon\Carbon;
+use Carbon\Carbon;
 use App\Support\Lista;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 
 class EntradaController extends ControllerBase {
 
@@ -55,24 +57,63 @@ class EntradaController extends ControllerBase {
         return $aLista;
     }
 
+    protected function validateUpdate(Request $request, Model $oModel) {
+        parent::validateUpdate($request, $oModel);
+        return $this->validaSituacaoPermiteManutencao($oModel, 'Alterar');
+    }
+
+    protected function validateDestroy(Model $oModel) {
+        parent::validateDestroy($oModel);
+        return $this->validaSituacaoPermiteManutencao($oModel, 'Excluir');
+    }
+
+    private function  validaSituacaoPermiteManutencao(Entrada $oEntrada, string $nomeAcao) {
+        if($oEntrada->situacao == Entrada::SITUACAO_CONCLUIDA) {
+            return redirect()->route("entradas.index")->withErrors("Erro ao $nomeAcao entrada. Entrada já está concluída");
+        }
+        return true;
+    }
+
     public function conclui($iId) {
         /* @var $oEntrada Entrada */
         $oEntrada = $this->Model->find($iId);
-        $bAlterou = $oEntrada->update(['situacao' => Entrada::SITUACAO_CONCLUIDA]);
+        $valido   = $this->validaSituacaoPermiteManutencao($this->Model, 'concluir');
 
-        if($bAlterou) {
-            $aItens = ItemEntrada::where('identrada', '=', $oEntrada->id);
+        if($valido instanceof RedirectResponse) {
+            return $valido;
+        }
+
+        $bOk = $oEntrada->update(['situacao' => Entrada::SITUACAO_CONCLUIDA]);
+
+        if($bOk) {
+            $aItens = ItemEntrada::where('identrada', '=', $oEntrada->id)->get();
 
             foreach ($aItens as $oItemEntrada) {
-                $oEstoqueProduto = Estoque::where('idproduto', '=', $oItemEntrada->idproduto);
+                /* @var $oEstoqueProduto Estoque */
+                $oEstoqueProduto = Estoque::where('idproduto', '=', $oItemEntrada->idproduto)->first();
+                $bOk = false;
 
                 if($oEstoqueProduto) {
-                    
+                    $oEstoqueProduto->addQuantidade($oItemEntrada->quantidade);
+                    $bOk = (bool)$oEstoqueProduto->update();
+                } else {
+                    $oEstoqueNovo = Estoque::create(['quantidade' => $oItemEntrada->quantidade, 'idproduto' => $oItemEntrada->idproduto]);
+                    $bOk = (bool) $oEstoqueNovo;
+                }
+
+                if(!$bOk) {
+                    break;
                 }
             }
         }
 
-        return dd($iId);
+        if($bOk) {
+            $currentPage  = request()->get('currentPage', 1);
+            $success      = "Entrada concluída com sucesso.";
+            return redirect()->route("entradas.index")->with('success', $success);
+        }
+
+        return redirect()->route("entradas.index")->withErrors('Erro ao concluir entrada');
     }
 
 }

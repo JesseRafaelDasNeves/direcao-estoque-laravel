@@ -19,4 +19,9 @@ class Estoque extends Model {
         return $this->hasOne('App\Model\Produto', 'id', 'idproduto');
     }
 
+    public function addQuantidade(float $qtdeAdd) {
+        $quantidadeAtual = $this->getAttributeValue('quantidade');
+        $this->setAttribute('quantidade', ($quantidadeAtual + $qtdeAdd));
+    }
+
 }

@@ -3,6 +3,7 @@
 @section('content')
 
 @include('layouts.alert-success')
+@include('layouts.alert-errors')
 
 <div class="btn-group-sm" >
     <a href="{{route('entradas.create', ['currentPage' => $currentPage])}}" class="btn btn-primary">Incluir</a>
@@ -40,7 +41,7 @@
                             'prefixRoute' => 'entradas',
                             'rotasExtras' => [
                                 'itemEntrada.index' => 'Itens',
-                                'entradas.conclui'  => 'Conclui'
+                                'entradas.conclui'  => 'Concluir'
                             ]
                         ])
                     </td>

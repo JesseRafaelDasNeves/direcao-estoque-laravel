@@ -16,7 +16,7 @@ class CreateEstoquesTable extends Migration {
             $table->bigIncrements('id');
             $table->decimal('quantidade', 8, 2);
 
-            $table->bigInteger('idproduto');
+            $table->bigInteger('idproduto')->unique();
             $table->foreign('idproduto', 'fk_produto_estoque')->references('id')->on('produtos');
 
             $table->timestamps();

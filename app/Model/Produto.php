@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Support\Lista;
+use App\Model\Estoque;
 
 class Produto extends Model {
 
@@ -82,6 +83,10 @@ class Produto extends Model {
 
     public function getDestricaoCategoria() {
         return Lista::getItem(self::getListaCategoria(), $this->categoria)->getNome();
+    }
+
+    public function getQuantidadeEstoque() {
+        return Estoque::where(['idproduto' => $this->id])->sum('quantidade');
     }
 
 }
