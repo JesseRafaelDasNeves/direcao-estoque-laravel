@@ -97,8 +97,13 @@ class EntradaController extends ControllerBase {
                     $oEstoqueProduto->addQuantidade($oItemEntrada->quantidade);
                     $bOk = (bool)$oEstoqueProduto->update();
                 } else {
-                    $oEstoqueNovo = Estoque::create(['quantidade' => $oItemEntrada->quantidade, 'idproduto' => $oItemEntrada->idproduto]);
-                    $bOk = (bool) $oEstoqueNovo;
+                    $oEstoqueProduto = Estoque::create(['quantidade' => $oItemEntrada->quantidade, 'idproduto' => $oItemEntrada->idproduto]);
+                    $bOk = (bool) $oEstoqueProduto;
+                }
+
+                if($bOk) {
+                    $oItemEntrada->setAttribute('idestoque', $oEstoqueProduto->id);
+                    $bOk = (bool)$oItemEntrada->update();
                 }
 
                 if(!$bOk) {
