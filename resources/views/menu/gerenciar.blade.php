@@ -7,5 +7,8 @@
         <a class="dropdown-item" href="{{ route('entradas.index') }}">
             {{ __('Entrada') }}
         </a>
+        <a class="dropdown-item" href="{{ route('saidas.index') }}">
+            {{ __('Saída') }}
+        </a>
     </div>
 </li>
