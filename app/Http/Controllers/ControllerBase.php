@@ -141,6 +141,14 @@ abstract class ControllerBase extends Controller {
         return $this->loadViewConsulta($models, $this->getParamsExtraViewConsulta());
     }
 
+    public function loadDadosModel(Model $model, Array $aDados) {
+        foreach ($aDados as $key => $value) {
+            if($model->isFillable($key)) {
+                $model->setAttribute($key, $value);
+            }
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -161,9 +169,8 @@ abstract class ControllerBase extends Controller {
     public function edit($id) {
         /* @var $model Model */
         $model = $this->Model->find($id);
-        if(count(old()) > 0) {
-            $model->setRawAttributes(old());
-        }
+        $this->loadDadosModel($model, old());
+
         return $this->loadViewManutencao($model, $this->getParamsExtraViewManutencao($model));
     }
 
@@ -185,6 +192,7 @@ abstract class ControllerBase extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        $this->loadDadosModel($this->Model, $request->all());
         $valido = $this->validateStore($request, $this->Model);
 
         if($valido instanceof RedirectResponse) {
@@ -217,6 +225,7 @@ abstract class ControllerBase extends Controller {
     public function update(Request $request, $id) {
         /* @var $model Model */
         $model    = $this->Model->find($id);
+        $this->loadDadosModel($model, $request->all());
         $valido  = $this->validateUpdate($request, $model);
 
         if($valido instanceof RedirectResponse) {

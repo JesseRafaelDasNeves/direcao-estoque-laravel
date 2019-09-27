@@ -67,4 +67,8 @@ class SaidaController extends ControllerBase {
         return parent::store($request);
     }
 
+    public function conclui(Request $request) {
+        
+    }
+
 }
