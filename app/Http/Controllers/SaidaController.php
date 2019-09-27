@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Saida;
 use App\Model\Pessoa;
+use App\Model\ItemSaida;
+use App\Model\Estoque;
 use App\Support\Lista;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class SaidaController extends ControllerBase {
 
@@ -67,8 +70,67 @@ class SaidaController extends ControllerBase {
         return parent::store($request);
     }
 
-    public function conclui(Request $request) {
-        
+    private function  validaSituacaoPermiteManutencao(Saida $oSaida, string $nomeAcao) {
+        if($oSaida->situacao == Saida::SITUACAO_CONCLUIDA) {
+            return redirect()->route("saidas.index")->withErrors("Erro ao $nomeAcao. Saída já está concluída");
+        }
+        return true;
+    }
+
+    public function conclui($id) {
+        /* @var $oSaida Saida */
+        $oSaida = $this->Model->find($id);
+        $valido = $this->validaSituacaoPermiteManutencao($oSaida, 'concluir');
+        $sMotivoErro = null;
+
+        if($valido instanceof RedirectResponse) {
+            return $valido;
+        }
+
+        DB::beginTransaction();
+
+        $bOk = $oSaida->update(['situacao' => Saida::SITUACAO_CONCLUIDA]);
+
+        if($bOk) {
+            $aItens = ItemSaida::where('idsaida', '=', $oSaida->id)->get();
+
+            foreach ($aItens as $oItemSaida) {
+                /* @var $oEstoque Estoque */
+                $oEstoque = Estoque::where('idproduto', '=', $oItemSaida->idproduto)->first();
+                $bOk = false;
+
+                if($oEstoque && ($oEstoque->quantidade >= $oItemSaida->quantidade)) {
+                    $oEstoque->retiraQuantidade($oItemSaida->quantidade);
+                    $bOk = (bool)$oEstoque->update();
+                } else {
+                    $bOk = false;
+                    if($oEstoque && ($oEstoque->quantidade < $oItemSaida->quantidade)) {
+                        $sMotivoErro = "Estoque do produto {$oItemSaida->idproduto} é insuficiente. Em estoque: {$oEstoque->quantidade}, Solicitada: {$oItemSaida->quantidade}";
+                    } else {
+                        $sMotivoErro = "Estoque do produto {$oItemSaida->idproduto} não foi encontado";
+                    }
+                }
+
+                if($bOk) {
+                    $oItemSaida->setAttribute('idestoque', $oEstoque->id);
+                    $bOk = (bool)$oItemSaida->update();
+                }
+
+                if(!$bOk) {
+                    break;
+                }
+            }
+        }
+
+        if($bOk) {
+            DB::commit();
+            $currentPage  = request()->get('currentPage', 1);
+            $success      = "Saída concluída com sucesso.";
+            return redirect()->route("saidas.index")->with('success', $success);
+        }
+
+        DB::rollBack();
+        return redirect()->route("saidas.index")->withErrors("Erro ao concluir saída. $sMotivoErro");
     }
 
 }

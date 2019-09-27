@@ -38,7 +38,8 @@
                             'id' => $saida->id,
                             'prefixRoute' => 'saidas',
                             'rotasExtras' => [
-                                'itemSaida.index' => 'Itens'
+                                'itemSaida.index' => 'Itens',
+                                'saidas.conclui'  => 'Concluir'
                             ]
                         ])
                     </td>

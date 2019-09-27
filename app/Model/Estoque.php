@@ -24,4 +24,9 @@ class Estoque extends Model {
         $this->setAttribute('quantidade', ($quantidadeAtual + $qtdeAdd));
     }
 
+    public function retiraQuantidade(float $qtde) {
+        $quantidadeAtual = $this->getAttributeValue('quantidade');
+        $this->setAttribute('quantidade', ($quantidadeAtual - $qtde));
+    }
+
 }
