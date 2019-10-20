@@ -36,6 +36,7 @@
                         @if (Auth::check())
                             @include('menu.cadastros')
                             @include('menu.gerenciar')
+                            @include('menu.consultas')
                         @endif
                     </ul>
 

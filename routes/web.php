@@ -17,3 +17,5 @@ Route::resource('/saidas/{idsaida}/itemSaida'      , 'ItemSaidaController');
 Route::get('/entradas/{id}/conclui', 'EntradaController@conclui')->name('entradas.conclui');
 Route::get('/saidas/{id}/conclui'  , 'SaidaController@conclui')->name('saidas.conclui');
 Route::get('/saidas/{idsaida}/itemSaida/qtdeEstoqueProduto/{id}/', 'ItemSaidaController@getQtdeEstoqueProduto');
+
+Route::get('/estoque/movimentacoes', 'EstoqueController@movimentacoes')->name('movimentacoes-estoque');
