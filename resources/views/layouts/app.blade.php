@@ -81,6 +81,8 @@
         <main class="py-4">
             <div class="container" >
                 @yield('content')
+				
+				<p>Laravel 5.8, <?= date('Y') ?>. PHP <?= phpversion() ?></p>
             </div>
         </main>
     </div>
