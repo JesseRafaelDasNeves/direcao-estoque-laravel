@@ -16,7 +16,7 @@ class EntradaController extends ControllerBase {
 
     public function __construct() {
         parent::__construct();
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     protected function getInstanceModel() {
