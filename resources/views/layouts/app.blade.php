@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/monitiramento-dynatrace.js') }}" defer></script>
+    <!--<script src="{{ asset('js/monitiramento-dynatrace.js') }}" defer></script> -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -82,7 +82,7 @@
             <div class="container" >
                 @yield('content')
 				
-				<p>Laravel 5.8, <?= date('Y') ?>. PHP <?= phpversion() ?></p>
+				<p> Laravel <?= Illuminate\Foundation\Application::VERSION ?>, <?= date('Y') ?>. PHP <?= phpversion() ?></p>
             </div>
         </main>
     </div>
