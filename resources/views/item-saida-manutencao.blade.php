@@ -47,7 +47,7 @@
 
 </script>
 
-    @include('form-app.open-with-params', ['prefixRoute' => 'itemSaida', 'aParams' => ['idsaida' => $model->idsaida, 'itemSaida' => $model->id, 'currentPage' => $currentPage]])
+    @include('form-app.open-with-params', ['prefixRoute' => 'itemSaida', 'aParams' => ['idsaida' => $model->idsaida, 'id' => $model->id, 'currentPage' => $currentPage]])
 
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Item:</label>

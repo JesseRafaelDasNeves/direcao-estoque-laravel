@@ -5,14 +5,20 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::resource('/pessoas'     , 'PessoaController');
-Route::resource('/fornecedores', 'FornecedorController');
-Route::resource('/produtos'    , 'ProdutoController');
-Route::resource('/entradas'    , 'EntradaController');
-Route::resource('/saidas'      , 'SaidaController');
+Route::resource('/pessoas'     , 'PessoaController')    ->parameters(['pessoas'      => 'id']);
+Route::resource('/fornecedores', 'FornecedorController')->parameters(['fornecedores' => 'id']);
+Route::resource('/produtos'    , 'ProdutoController')   ->parameters(['produtos'     => 'id']);
+Route::resource('/entradas'    , 'EntradaController')   ->parameters(['entradas'     => 'id']);
+Route::resource('/saidas'      , 'SaidaController')     ->parameters(['saidas'       => 'id']);
 
-Route::resource('/entradas/{identrada}/itemEntrada', 'ItemEntradaController');
-Route::resource('/saidas/{idsaida}/itemSaida'      , 'ItemSaidaController');
+Route::resource('/entradas/{identrada}/itemEntrada', 'ItemEntradaController')->parameters([
+    'entradas'    => 'identrada',
+    'itemEntrada' => 'id',
+]);
+Route::resource('/saidas/{idsaida}/itemSaida', 'ItemSaidaController')->parameters([
+    'saidas'    => 'idsaida',
+    'itemSaida' => 'id',
+]);
 
 Route::get('/entradas/{id}/conclui', 'EntradaController@conclui')->name('entradas.conclui');
 Route::get('/saidas/{id}/conclui'  , 'SaidaController@conclui')->name('saidas.conclui');

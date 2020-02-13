@@ -30,7 +30,7 @@
 
 </script>
 
-    @include('form-app.open-with-params', ['prefixRoute' => 'itemEntrada', 'aParams' => ['identrada' => $model->identrada, 'itemEntrada' => $model->id, 'currentPage' => $currentPage]])
+    @include('form-app.open-with-params', ['prefixRoute' => 'itemEntrada', 'aParams' => ['identrada' => $model->identrada, 'id' => $model->id, 'currentPage' => $currentPage]])
 
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Item:</label>

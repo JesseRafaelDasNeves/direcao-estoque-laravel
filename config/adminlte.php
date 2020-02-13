@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => 'Direção Estoque',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image-xl',
     'logo_img_xl' => null,
@@ -202,43 +202,56 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
+            'text'    => 'Cadastros',
+            'url'     => '#',
+            'icon'    => 'fas fa-fw fa-puzzle-piece',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Pessoa',
+                    'url'  => 'pessoas',
+                    'icon' => 'fas fa-fw fa-users',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => 'Fornecedor',
+                    'url'  => 'fornecedores',
+                    'icon' => 'fas fa-fw fa-truck',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Produto',
+                    'url'  => 'produtos',
+                    'icon' => 'fas fa-fw fa-shopping-bag',
                 ],
             ],
         ],
+        [
+            'text'    => 'Movimentação',
+            'url'     => '#',
+            'icon'    => 'fas fa-fw fa-retweet',
+            'submenu' => [
+                [
+                    'text' => 'Entradas',
+                    'url'  => 'entradas',
+                    'icon' => 'fas fa-fw fa-plus',
+                ],
+                [
+                    'text' => 'Saídas',
+                    'url'  => 'saidas',
+                    'icon' => 'fas fa-fw fa-minus',
+                ],
+            ],
+        ],
+        /*[
+            'text'    => 'Consultar',
+            'url'     => '#',
+            'icon'    => 'fas fa-fw fa-retweet',
+            'submenu' => [
+                [
+                    'text' => 'Movimentações',
+                    'url'  => 'movimentacoes-estoque',
+                    'icon' => 'fas fa-fw fa-plus',
+                ],
+            ],
+        ],*/
         ['header' => 'labels'],
         [
             'text'       => 'important',

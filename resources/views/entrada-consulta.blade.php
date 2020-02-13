@@ -40,8 +40,8 @@
                             'id' => $entrada->id,
                             'prefixRoute' => 'entradas',
                             'rotasExtras' => [
-                                'itemEntrada.index' => 'Itens',
-                                'entradas.conclui'  => 'Concluir'
+                                route('itemEntrada.index', ['identrada' => $entrada->id]) => 'Itens',
+                                route('entradas.conclui' , ['id'        => $entrada->id]) => 'Concluir'
                             ]
                         ])
                     </td>

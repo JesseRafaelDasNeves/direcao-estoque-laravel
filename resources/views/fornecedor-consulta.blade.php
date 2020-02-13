@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section ('title', 'Fornecedores')
+
 @section('content')
 
 @include('layouts.alert-success')

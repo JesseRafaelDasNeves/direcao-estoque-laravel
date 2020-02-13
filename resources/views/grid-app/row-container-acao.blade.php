@@ -10,10 +10,9 @@
            >Excluir
         </a>
         @if(isset($rotasExtras))
-            @foreach($rotasExtras as $nomeRota => $tituloRota)
+            @foreach($rotasExtras as $url_rota => $tituloRota)
                 <a class="btn btn-sm btn-primary" style="margin: 1px;"
-                   href="{{route($nomeRota, ['id' => $id, 'currentPage' => $currentPage])}}"
-                   >{{$tituloRota}}
+                   href="{{$url_rota}}">{{$tituloRota}}
                 </a>
             @endforeach
         @endif
