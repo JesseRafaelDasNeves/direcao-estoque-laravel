@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section ('title', 'Pessoas')
+
 @section('content')
 
     @include('form-app.open-default', ['prefixRoute' => 'pessoas'])

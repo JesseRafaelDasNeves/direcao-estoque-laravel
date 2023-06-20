@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableItensSaida extends Migration {
+class AlterTableItensSaidaRemoveUnique extends Migration {
 
     /**
      * Run the migrations.
@@ -26,6 +26,8 @@ class AlterTableItensSaida extends Migration {
      *
      * @return void
      */
-    public function down() {}
+    public function down() {
+        
+    }
 
 }
